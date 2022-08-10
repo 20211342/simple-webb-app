@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> dashboard.html</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<! -- dependencies used by bootstrap start -->
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<! -- dependencies used by bootstrap end -->
+		
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+			}
+			html,body {
+				height: 100%;
+			}
+            .titlen{
+                text-align: center;
+                color: green;
+                background-image: linear-gradient(to right, green, white, orange)
+            }
+			.dataName,.totalName {
+				font-size: large;
+				font-weight: bold;
+			}
+			.totalInfoDiv {
+				background-color: #CCE8FF;
+				display: block;
+				height: 120px;
+				line-height: 50px;
+				overflow: hidden;
+			}
+			
+			.dropdown-menu a:hover,.city_list li:hover {
+				background-color: #50AEF6;
+			}
+		</style>
+	</head>
+	<body>
+        <header class="titlen">
+        <h1>IRELAND'S COVID-19</h1>
+        </header>
+		<div class="container">
+			<!-- modul one start -->
+			<div>
+				<h2 style="text-align: center;">Total Vaccinations Administered In The Year 2021 To Date</h2>
+				<div class="totalInfoDiv">
+					<div style="background-color: #F0F0F4;height: 60px;">
+						<label class="dataName" style="float: left">Cases Data Last Updated</label>
+						<label class="totalName" style="float: right">Total Confirmed Cases</label>
+					</div>
+					<div style="background-color: #F9F9FB;">
+						<label class="curdate" id="curent_date">0/0/0</label>
+						<label class="totalNum" id="total_people" style="float: right;">0</label>
+					</div>
+				</div>
+			</div>
+			<!-- modul one end -->
+			<!-- modul two start -->
+			<div>
+				<div class="dropdown">
+					<h2 style="text-align: center;">Weekly Information</h2>
+					<div class="nav-item dropdown aDropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Week</a>
+						<div class="dropdown-menu perweek" aria-labelledby="navbarDropdown1" id="menu_perweek"></div>
+					</div>
+				</div>
+				<table class="table table1">
+					<thead>
+						<tr><th>Total Weekly Vaccinations Administered</th><th>Moderna Vaccinations Administered</th><th>Pfizer Vaccinations Administered</th><th>Janssen Vaccinations Administered</th><th>AstraZeneca Vaccinations Administered</th></tr>
+					</thead>
+					<tbody id="week_data">
+					</tbody>
+				</table>
+				<div class="nav-item dropdown aDropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Total Number</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+						<a class="dropdown-item" href="#" onclick="AgeShowType(1)">Total Number</a>
+						<a class="dropdown-item" href="#" onclick="AgeShowType(2)">Percentage</a>
+					</div>
+				</div>
+				<table class="table table2">
+					<thead>
+						<tr><th>Age 10 to 19</th><th>Age 20 to 29</th><th>Age 30 to 39</th><th>Age 40 to 49</th><th>Age 50 to 59</th><th>Age 60 to 69</th><th>Age 70 to 79</th><th>Age Over 80</th></tr>
+					</thead>
+					<tbody id="age_data">
+					</tbody>
+				</table>
+			</div>
+			<!-- modul two end-->
+			<!-- module three start -->
+			<div>
+				<div class="dropdown">
+					<h2 style="text-align: center;">County Information</h2>
+					<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo">Select City</button>
+					<div class="collapse" id="demo" style="margin-top: 30px;">
+						<ul class="list-group city_list" style="width: 200px;" id="city_llist"></ul>
+					</div>
+					<button type="button" class="btn btn-success" onclick="SearchCityInfo()">Check</button>
+				</div>
+				<table class="table table3">
+					<thead>
+						<tr><th>County Name</th><th>Population</th><th>Confirmed COVID Cases</th><th>Population Proportional COVID Cases</th><th>Cases per 100,000 people</th></tr>
+					</thead>
+					<tbody id="county_num"></tbody>
+				</table>
+			</div>
+			<!-- module three end -->
+		</div>
+	</body>
+	<script>
+		/* Get the current time */
+		function getFormatDate() {
+			var now = new Date();
+			var time = now.getFullYear() + "-" +
+				((now.getMonth() + 1) < 10 ? "0" : "") + (now.getMonth() + 1) + "-" +
+				(now.getDate() < 10 ? "0" : "") + now.getDate();
+			return time;
+		}
+		/* Get a week's information */
+		function GetWeekInfo(id) {
+			var url = "https://services-eu1.arcgis.com/z6bHNio59iTqqSUY/arcgis/rest/services/COVID19_Weekly_Vaccination_Figures/FeatureServer/0/query?where=1%3D1&outFields=Week,TotalweeklyVaccines,NA,Moderna,Pfizer,Janssen,AstraZeneca,FullyCum_Age10to19,FullyCum_Age20to29,FullyCum_Age30to39,FullyCum_Age40to49,FullyCum_Age50to59,FullyCum_Age60to69,FullyCum_Age70to79,FullyCum_80_,FullyPer_Age10to19,FullyPer_Age20to29,FullyPer_Age30to39,FullyPer_Age40to49,FullyPer_Age50to59,FullyPer_Age60to69,FullyPer_Age70to79,FullyPer_80_&outSR=4326&f=json";
+			var xhr = new XMLHttpRequest(),
+				method = "GET",
+				url = url;
+			xhr.open(method, url, true);
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					var data = JSON.parse(xhr.responseText);
+					var totalNum = 0;
+					var data_list = data.features;
+					for (var i = 0; i < data_list.length; i++) {
+						var item = data_list[i];
+						/* id=-1 for the default latest week, otherwise query the specified week */
+						if (id == -1 && i == 0 || id == i) {
+							/* default last week's data */
+							tr_data = '<tr>' +
+								'<td>' + item.attributes.TotalweeklyVaccines + '</td>' +
+								'<td>' + item.attributes.Moderna + '</td>' +
+								'<td>' + item.attributes.Pfizer + '</td>' +
+								'<td>' + item.attributes.Janssen + '</td>' +
+								'<td>' + item.attributes.AstraZeneca + '</td>' +
+								'</tr>';
+							document.getElementById('week_data').innerHTML = tr_data
+							if (id != -1)
+								document.getElementById('navbarDropdown1').innerHTML = item.attributes.Week;
+							/* default last week's data */
+							/* Age group information */
+							tr_data2 = '<tr id="Cum">' +
+								'<td>' + item.attributes.FullyCum_Age10to19 + '</td>' +
+								'<td>' + item.attributes.FullyCum_Age20to29 + '</td>' +
+								'<td>' + item.attributes.FullyCum_Age30to39 + '</td>' +
+								'<td>' + item.attributes.FullyCum_Age40to49 + '</td>' +
+								'<td>' + item.attributes.FullyCum_Age50to59 + '</td>' +
+								'<td>' + item.attributes.FullyCum_Age60to69 + '</td>' +
+								'<td>' + item.attributes.FullyCum_Age70to79 + '</td>' +
+								'<td>' + item.attributes.FullyCum_80_ + '</td>' +
+								'</tr>';
+							tr_data3 = '<tr id="Per" style="display:None;">' +
+								'<td>' + parseFloat(item.attributes.FullyPer_Age10to19*100).toFixed(4)+'%' + '</td>' +
+								'<td>' + parseFloat(item.attributes.FullyPer_Age20to29*100).toFixed(4)+'%' + '</td>' +
+								'<td>' + parseFloat(item.attributes.FullyPer_Age30to39*100).toFixed(4)+'%' + '</td>' +
+								'<td>' + parseFloat(item.attributes.FullyPer_Age40to49*100).toFixed(4)+'%' + '</td>' +
+								'<td>' + parseFloat(item.attributes.FullyPer_Age50to59*100).toFixed(4)+'%' + '</td>' +
+								'<td>' + parseFloat(item.attributes.FullyPer_Age60to69*100).toFixed(4)+'%' + '</td>' +
+								'<td>' + parseFloat(item.attributes.FullyPer_Age70to79*100).toFixed(4)+'%' + '</td>' +
+								'<td>' + parseFloat(item.attributes.FullyPer_80_*100).toFixed(4)+'%' + '</td>' +
+								'</tr>';
+							document.getElementById('age_data').innerHTML = tr_data2 + tr_data3
+							/* Age group information */
+						}
+						/* Initialize dropdown menu */
+						if (id == -1) {
+							/* Get dropdown menu */
+							week = item.attributes.Week;
+							week_menu = '<a class="dropdown-item" href="#" onclick="GetWeekInfo(' + i + ');">' + week +'</a>';
+							document.getElementById('menu_perweek').innerHTML += week_menu;
+							/* Set the latest time and total number of people */
+							totalNum += parseInt(item.attributes.TotalweeklyVaccines);
+							if (i == data.features.length - 1) {
+								document.getElementById('total_people').innerHTML = totalNum;
+								curdate = getFormatDate();
+								document.getElementById('curent_date').innerHTML = curdate;
+							}
+						}
+					} /* for end */
+				}
+			}
+			xhr.send();
+		}
+		/* Initialize execution function, default latest week */
+		GetWeekInfo(-1);/* Execute the function */
+
+		function GetCityInfo(id) {
+			var url = "https://services1.arcgis.com/eNO7HHeQ3rUcBllm/arcgis/rest/services/Covid19CountyStatisticsHPSCIrelandOpenData/FeatureServer/0/query?where=1%3D1&outFields=CountyName,PopulationCensus16,ConfirmedCovidCases,PopulationProportionCovidCases,IGEasting&outSR=4326&f=json";
+			var xhr = new XMLHttpRequest(),
+				method = "GET",
+			 url = url;
+			xhr.open(method, url, true);
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					var data = JSON.parse(xhr.responseText);
+					var data_list = data.features;
+					for (var i = 0; i < data_list.length; i++) {
+						var item = data_list[i];
+						/* Initialize dropdown menu and bind events (select up to 3 checkboxes) */
+						if (id == -1) {
+							/* Get dropdown menu */
+							CountyName = item.attributes.CountyName;
+							city_menu = '<li class="list-group-item">' + CountyName +
+								' <input type="checkbox" class="city_box" value="' + i + '"/></li>'
+							document.getElementById('city_llist').innerHTML += city_menu;
+							if (i == data.features.length - 1) {
+								/* Limit to 3 cities */ 
+								var city_box = document.getElementsByClassName('city_box');
+								for (var i = 0; i < city_box.length; i++) {
+									if (city_box[i].addEventListener) {
+										city_box[i].addEventListener('change', function() {
+											if (this.checked) {
+										  var checkvalue = [];
+												for (var i = 0; i < city_box.length; i++) {
+													if (city_box[i].checked)
+														checkvalue.push(city_box[i].value);
+												}
+												if (checkvalue.length > 3) {
+													this.checked = false;
+												}
+											}
+										});
+									}
+								}
+							}
+						} else {
+						/* Query to select cities and sort */
+				 		if (i == 0) {
+								document.getElementById('county_num').innerHTML = "";
+							}
+							for (var j = 0; j < id.length; j++) {
+								if (id[j] == i) {
+									/* View data for a particular county */
+									var pro = parseFloat(item.attributes.ConfirmedCovidCases) / parseFloat(item.attributes.PopulationCensus16);
+				 				tr_data = '<tr>' +
+										'<td>' + item.attributes.CountyName + '</td>' +
+				 					    '<td>' + item.attributes.PopulationCensus16 + '</td>' +
+										'<td>' + item.attributes.ConfirmedCovidCases + '</td>' +
+										'<td>' + parseFloat(pro*100).toFixed(4) + '%' + '</td>' +
+										'<td>' + (pro * 100000) + '</td>' +
+										'</tr>';
+									/* Insert Sort */
+									var chilist = document.getElementById('county_num').children;
+									if (chilist.length == 0) {
+										document.getElementById('county_num').innerHTML += tr_data;
+									} else {
+										for (var k = 0; k < chilist.length; k++) {
+											ch = chilist.item(k);
+											p = parseFloat(ch.children[4].innerHTML);
+											if (parseFloat(pro * 100000) > p) {
+												ch.insertAdjacentHTML('beforebegin', tr_data);
+												break;
+											}
+										}
+										if (k == chilist.length) {
+											document.getElementById('county_num').innerHTML += tr_data;
+										}
+									}
+								}
+							}
+						}
+					} /* for end */
+					return false;
+				}
+			}
+			xhr.send();
+		}
+		GetCityInfo(-1); /* Execute the function */
+		/* city information search, up to 3 records */
+		function SearchCityInfo() {
+			var list = new Array();
+			obj = document.getElementsByClassName("city_box");
+			for (k in obj) {
+				if (obj[k].checked)
+					list.push(obj[k].value);
+			}
+			GetCityInfo(list);
+		}
+		/* Total number and percentage switching */
+		function AgeShowType(type) {
+			if (type == 1) {
+				document.getElementById("Per").style.display = "none";
+				document.getElementById("Cum").style.display = "";
+				document.getElementById('navbarDropdown2').innerHTML = 'Total Number';
+			} else {
+				document.getElementById("Cum").style.display = "none";
+				document.getElementById("Per").style.display = "";
+				document.getElementById('navbarDropdown2').innerHTML = 'Percentage';
+			}
+		}
+	</script>
+</html>
