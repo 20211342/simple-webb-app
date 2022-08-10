@@ -1,0 +1,49 @@
+body{
+    
+    background-image: url("2.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+ 
+#login{
+    margin: 0 auto;
+    margin-top: 200px;
+    padding: 30px 60px;
+    background-color: rgba(0, 0, 0, 0.87);
+    width: 300px;
+    height: 300px;
+    text-align: center;
+}
+ 
+#login h1{
+    color:black;
+    background-image: linear-gradient(to right, green, white, orange)
+ 
+}
+ 
+#login .login_box{
+    margin-top: 40px;
+}
+ 
+#login .login_box .frameEnter{
+    margin-top: 40px;
+}
+ 
+#login .login_box .frameEnter input{
+    border: 0;
+    padding: 10px 10px;
+    border-bottom: 1px solid yellow;
+    background-color: rgba(0, 0, 0, 0.87);
+    color: white;
+}
+ 
+#interface .frame .inputButton{
+    border:  0;
+    width: 150px;
+    height: 25px;
+    color: white;
+    margin-top: 30px;
+    border-radius: 20px;
+    background-image: linear-gradient(to right, #b8cbb8 0%, #b8cbb8 0%, #b465da 0%, #cf6cc9 33%, #ee609c 66%, #ee609c 100%); /*color from internet*/
+}

@@ -1,0 +1,178 @@
+body{
+    background-image: url("image/background3.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+	font: normal 15px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;	
+}
+
+ul {
+
+	opacity: 0.7;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-bottom: black;
+    background-image: linear-gradient(to right, black, red, orange)
+	
+    
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    padding: 20px;
+    color: yellow;
+    font-size: large;
+    text-decoration: none;
+    
+}
+
+.hero-image{
+	text-align: center;
+    top:0;
+    left:0;
+    margin: 0,auto;
+    
+}
+
+.hero-image h1{
+    color:yellow
+}
+
+.hero-image h2{
+    color:yellow;    
+}
+
+.hero-image h4{
+	color: yellow;
+}
+
+strong {
+	font-weight: bold;
+}
+
+.video{
+    position: relative;
+    left: 400px;
+
+}
+form{
+	text-align: center;
+}
+.form-title h1{
+	text-align: center;
+	color: yellow;
+}
+
+
+.form label{
+	position: relative;
+    margin-top: 20px;
+	color: yellow;
+	font-size: large;
+
+}
+
+.form input[type=text], select {
+	width: 100%;
+	padding: 10px 20px;
+	margin: 10px 0;
+	display: inline-block;
+	border: 1px solid white;
+	border-radius: 80px;
+	box-sizing: border-box;
+}
+  
+.form input[type=submit] {
+	width: 10%;
+	background-color: red;
+	color: white;
+	padding: 10px 20px;
+	margin: 10px 0;
+	border: none;
+	border-radius: 80px;
+	cursor: pointer;
+	font-size: large;
+}
+  
+.form input[type=submit]:hover {
+	color: yellow;
+	background-image: linear-gradient(to right, black, red, orange);
+	border: 0;
+	border-radius: 20px;
+	font-size: x-large;
+	transition: all 0.5s;
+
+}
+  
+.form {
+	border-radius: 40px;
+	background-color: rgba(0, 0, 0, 0.87);
+	padding: 30px;
+	opacity: 0.8;
+}
+
+.faq{
+	color: yellow;
+}
+
+.faq .faq_heading{
+	text-align: center;
+	padding: 20px 60px;
+
+}
+
+.faq .faq_subtitle{
+	text-align: center;
+}
+
+.faq .faq_content{
+
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.hr-line{
+	width: 86%;
+	margin: auto;
+	color: white;
+	float: left;
+	
+}
+
+.faq .content_title{
+	color: rgba(255, 255, 0, 0.836);
+	cursor: pointer;
+	padding: 30px 20px;
+	width: 100%;
+	border: none;
+	outline: none;
+	margin: auto;
+	font-size: large;
+
+}
+
+.faq .pages{
+	padding: 0;
+	color: azure;
+	font-size: medium;    
+}
+
+.footer-address{
+	text-align: center;
+	color: yellow;
+	max-width: 100%;
+}
+
+.footer{
+	color: yellow;
+	float: right;
+	text-align: center;
+	margin-top: 200px;
+}
